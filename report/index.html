@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bradesco Reembolso Monitor — Dashboard</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --brand: #CC0000;
+      --brand-dark: #990000;
+      --bg: #f5f5f7;
+      --card: #ffffff;
+      --text: #1d1d1f;
+      --muted: #6e6e73;
+      --border: #d2d2d7;
+      --green: #34c759;
+      --orange: #ff9f0a;
+      --red: #ff3b30;
+      --blue: #007aff;
+      --purple: #af52de;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    header {
+      background: var(--brand);
+      color: white;
+      padding: 1.25rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    header h1 { font-size: 1.4rem; font-weight: 700; letter-spacing: -0.02em; }
+    header p  { font-size: 0.85rem; opacity: 0.85; }
+
+    .upload-zone {
+      background: white;
+      border: 2px dashed var(--border);
+      border-radius: 12px;
+      padding: 2.5rem;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color .2s, background .2s;
+      margin: 2rem auto;
+      max-width: 560px;
+    }
+    .upload-zone:hover { border-color: var(--brand); background: #fff5f5; }
+    .upload-zone .icon { font-size: 2.5rem; margin-bottom: .75rem; }
+    .upload-zone p { color: var(--muted); font-size: .9rem; }
+    .upload-zone strong { color: var(--brand); }
+    #fileInput { display: none; }
+
+    .btn {
+      display: inline-block;
+      margin-top: 1rem;
+      padding: .6rem 1.4rem;
+      background: var(--brand);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: .9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background .2s;
+    }
+    .btn:hover { background: var(--brand-dark); }
+
+    main { max-width: 1280px; margin: 0 auto; padding: 2rem; }
+
+    #dashboard { display: none; }
+
+    /* Filters */
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .75rem;
+      margin-bottom: 2rem;
+      align-items: center;
+    }
+    .filters select, .filters input[type=text] {
+      padding: .5rem .9rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: .875rem;
+      background: white;
+      color: var(--text);
+      outline: none;
+      transition: border-color .2s;
+    }
+    .filters select:focus, .filters input[type=text]:focus { border-color: var(--brand); }
+    .filters label { font-size: .8rem; color: var(--muted); }
+
+    /* Summary Cards */
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .card {
+      background: var(--card);
+      border-radius: 12px;
+      padding: 1.25rem 1.5rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,.08);
+      border-left: 4px solid var(--border);
+    }
+    .card.green  { border-left-color: var(--green); }
+    .card.orange { border-left-color: var(--orange); }
+    .card.red    { border-left-color: var(--red); }
+    .card.blue   { border-left-color: var(--blue); }
+    .card.purple { border-left-color: var(--purple); }
+    .card.brand  { border-left-color: var(--brand); }
+
+    .card-label { font-size: .75rem; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin-bottom: .4rem; }
+    .card-value { font-size: 1.6rem; font-weight: 700; letter-spacing: -.03em; }
+    .card-sub   { font-size: .8rem; color: var(--muted); margin-top: .25rem; }
+
+    /* Charts */
+    .charts {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 1.25rem;
+      margin-bottom: 2rem;
+    }
+    .chart-card {
+      background: white;
+      border-radius: 12px;
+      padding: 1.25rem 1.5rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,.08);
+    }
+    .chart-card h3 { font-size: .9rem; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 1rem; }
+    .chart-card canvas { width: 100% !important; }
+
+    /* Table */
+    .table-card {
+      background: white;
+      border-radius: 12px;
+      padding: 1.5rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,.08);
+      overflow-x: auto;
+    }
+    .table-card h3 {
+      font-size: .9rem; color: var(--muted);
+      text-transform: uppercase; letter-spacing: .06em;
+      margin-bottom: 1rem;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .table-count { font-size: .85rem; color: var(--muted); }
+
+    table { width: 100%; border-collapse: collapse; font-size: .85rem; }
+    thead th {
+      text-align: left;
+      padding: .6rem 1rem;
+      background: var(--bg);
+      color: var(--muted);
+      font-size: .75rem;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      cursor: pointer;
+      white-space: nowrap;
+      user-select: none;
+    }
+    thead th:hover { color: var(--brand); }
+    thead th.sorted { color: var(--brand); }
+    thead th.sorted::after { content: " ↕"; }
+
+    tbody tr { border-top: 1px solid var(--border); transition: background .1s; }
+    tbody tr:hover { background: #fafafa; }
+    tbody td { padding: .7rem 1rem; vertical-align: middle; }
+
+    .badge {
+      display: inline-block;
+      padding: .2rem .6rem;
+      border-radius: 999px;
+      font-size: .72rem;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    .badge-pago        { background: #d1fae5; color: #065f46; }
+    .badge-parcial     { background: #fef3c7; color: #92400e; }
+    .badge-analise     { background: #dbeafe; color: #1e40af; }
+    .badge-rejeitado   { background: #fee2e2; color: #991b1b; }
+
+    .amount { font-variant-numeric: tabular-nums; }
+    .amount.neg { color: var(--red); }
+    .amount.zero { color: var(--muted); }
+
+    /* Beneficiary tabs */
+    .tabs {
+      display: flex;
+      gap: .5rem;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+    }
+    .tab {
+      padding: .45rem 1rem;
+      border-radius: 999px;
+      border: 1.5px solid var(--border);
+      background: white;
+      font-size: .85rem;
+      cursor: pointer;
+      transition: all .2s;
+      font-weight: 500;
+    }
+    .tab.active { background: var(--brand); border-color: var(--brand); color: white; }
+    .tab:hover:not(.active) { border-color: var(--brand); color: var(--brand); }
+
+    #emptyState {
+      text-align: center;
+      padding: 3rem;
+      color: var(--muted);
+      font-size: .9rem;
+    }
+
+    footer {
+      text-align: center;
+      padding: 2rem;
+      color: var(--muted);
+      font-size: .8rem;
+    }
+
+    @media (max-width: 600px) {
+      main { padding: 1rem; }
+      .card-value { font-size: 1.3rem; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>🔍 Bradesco Reembolso Monitor</h1>
+    <p>Dashboard de acompanhamento de reembolsos</p>
+  </div>
+  <button class="btn" onclick="document.getElementById('fileInput').click()">📂 Carregar JSON</button>
+  <input type="file" id="fileInput" accept=".json" />
+</header>
+
+<main>
+  <!-- Upload zone (shown when no data) -->
+  <div class="upload-zone" id="uploadZone" onclick="document.getElementById('fileInput').click()">
+    <div class="icon">📄</div>
+    <p><strong>Clique aqui</strong> ou arraste o arquivo JSON gerado pelo Claude</p>
+    <p style="margin-top:.5rem">Arquivo: <code>*_reembolsos_catalog_*.json</code></p>
+    <button class="btn" type="button">Selecionar arquivo</button>
+  </div>
+
+  <!-- Dashboard (hidden until data loaded) -->
+  <div id="dashboard">
+
+    <!-- Beneficiary Tabs -->
+    <div class="tabs" id="tabs"></div>
+
+    <!-- Filters -->
+    <div class="filters">
+      <div>
+        <label>Buscar</label><br/>
+        <input type="text" id="searchInput" placeholder="Protocolo, tipo, status..." style="min-width:220px" />
+      </div>
+      <div>
+        <label>Status</label><br/>
+        <select id="statusFilter">
+          <option value="">Todos os status</option>
+          <option value="pago">Pago</option>
+          <option value="pago_parcial">Pago Parcial</option>
+          <option value="em_analise">Em Análise</option>
+          <option value="rejeitado">Rejeitado / Não autorizado</option>
+        </select>
+      </div>
+      <div>
+        <label>Ano</label><br/>
+        <select id="yearFilter"><option value="">Todos os anos</option></select>
+      </div>
+      <div>
+        <label>Tipo</label><br/>
+        <select id="tipoFilter"><option value="">Todos os tipos</option></select>
+      </div>
+    </div>
+
+    <!-- Summary Cards -->
+    <div class="cards" id="cards"></div>
+
+    <!-- Charts -->
+    <div class="charts">
+      <div class="chart-card">
+        <h3>Reembolsos por mês (data competência)</h3>
+        <canvas id="chartBar" height="220"></canvas>
+      </div>
+      <div class="chart-card">
+        <h3>Distribuição por status</h3>
+        <canvas id="chartPie" height="220"></canvas>
+      </div>
+      <div class="chart-card" style="grid-column: 1 / -1;">
+        <h3>Valor solicitado vs reembolsado por mês</h3>
+        <canvas id="chartCompare" height="140"></canvas>
+      </div>
+    </div>
+
+    <!-- Table -->
+    <div class="table-card">
+      <h3>
+        Detalhamento
+        <span class="table-count" id="tableCount"></span>
+      </h3>
+      <div id="emptyState" style="display:none">Nenhum registro encontrado para os filtros selecionados.</div>
+      <table id="mainTable">
+        <thead>
+          <tr>
+            <th data-col="protocolo">Protocolo</th>
+            <th data-col="data_competencia">Data Competência</th>
+            <th data-col="data_solicitacao">Data Solicitação</th>
+            <th data-col="beneficiario">Beneficiário</th>
+            <th data-col="tipo_atendimento">Tipo</th>
+            <th data-col="valor_solicitado" style="text-align:right">Solicitado</th>
+            <th data-col="valor_reembolsado" style="text-align:right">Reembolsado</th>
+            <th data-col="diff" style="text-align:right">Diff</th>
+            <th data-col="status">Status</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
+      </table>
+    </div>
+
+  </div><!-- #dashboard -->
+</main>
+
+<footer>
+  bradesco-reembolso-monitor · dados ficam apenas no seu navegador · nenhuma informação é enviada a servidores
+</footer>
+
+<script>
+// ─────────────────────────────────────────────
+// State
+// ─────────────────────────────────────────────
+let allData = [];        // all records from all loaded JSONs
+let filtered = [];       // after filters
+let sortCol = 'data_competencia';
+let sortAsc = false;
+let activeBeneficiary = 'todos';
+let chartBar, chartPie, chartCompare;
+
+// ─────────────────────────────────────────────
+// File loading
+// ─────────────────────────────────────────────
+const fileInput = document.getElementById('fileInput');
+const uploadZone = document.getElementById('uploadZone');
+
+fileInput.addEventListener('change', e => {
+  const files = Array.from(e.target.files);
+  files.forEach(loadFile);
+  e.target.value = '';
+});
+
+uploadZone.addEventListener('dragover', e => { e.preventDefault(); uploadZone.style.borderColor='var(--brand)'; });
+uploadZone.addEventListener('dragleave', () => { uploadZone.style.borderColor=''; });
+uploadZone.addEventListener('drop', e => {
+  e.preventDefault();
+  uploadZone.style.borderColor = '';
+  Array.from(e.dataTransfer.files).forEach(loadFile);
+});
+
+function loadFile(file) {
+  const reader = new FileReader();
+  reader.onload = ev => {
+    try {
+      const json = JSON.parse(ev.target.result);
+      const records = json.reembolsos || (Array.isArray(json) ? json : []);
+      records.forEach(r => {
+        if (!allData.find(x => x.protocolo === r.protocolo)) {
+          allData.push(r);
+        }
+      });
+      render();
+    } catch(err) {
+      alert('Erro ao ler o arquivo: ' + err.message);
+    }
+  };
+  reader.readAsText(file);
+}
+
+// ─────────────────────────────────────────────
+// Render
+// ─────────────────────────────────────────────
+function render() {
+  if (!allData.length) return;
+
+  document.getElementById('uploadZone').style.display = 'none';
+  document.getElementById('dashboard').style.display = 'block';
+
+  buildTabs();
+  populateFilters();
+  applyFilters();
+}
+
+function buildTabs() {
+  const beneficiaries = ['todos', ...new Set(allData.map(r => r.beneficiario).filter(Boolean))];
+  const tabs = document.getElementById('tabs');
+  tabs.innerHTML = beneficiaries.map(b =>
+    `<button class="tab ${b === activeBeneficiary ? 'active' : ''}" onclick="setTab('${b}')">${b === 'todos' ? '👥 Todos' : '👤 ' + b}</button>`
+  ).join('');
+}
+
+function setTab(b) {
+  activeBeneficiary = b;
+  buildTabs();
+  applyFilters();
+}
+
+function populateFilters() {
+  const years = [...new Set(allData.map(r => r.data_competencia?.split('/')[2]).filter(Boolean))].sort();
+  const yf = document.getElementById('yearFilter');
+  yf.innerHTML = '<option value="">Todos os anos</option>' + years.map(y => `<option value="${y}">${y}</option>`).join('');
+
+  const tipos = [...new Set(allData.map(r => r.tipo_atendimento).filter(Boolean))].sort();
+  const tf = document.getElementById('tipoFilter');
+  tf.innerHTML = '<option value="">Todos os tipos</option>' + tipos.map(t => `<option value="${t}">${t}</option>`).join('');
+}
+
+function applyFilters() {
+  const search = document.getElementById('searchInput').value.toLowerCase();
+  const status = document.getElementById('statusFilter').value;
+  const year   = document.getElementById('yearFilter').value;
+  const tipo   = document.getElementById('tipoFilter').value;
+
+  filtered = allData.filter(r => {
+    if (activeBeneficiary !== 'todos' && r.beneficiario !== activeBeneficiary) return false;
+    if (status && r.status_categoria !== status) return false;
+    if (year && !r.data_competencia?.endsWith(year)) return false;
+    if (tipo && r.tipo_atendimento !== tipo) return false;
+    if (search) {
+      const haystack = [r.protocolo, r.tipo_atendimento, r.status, r.beneficiario].join(' ').toLowerCase();
+      if (!haystack.includes(search)) return false;
+    }
+    return true;
+  });
+
+  sortData();
+  updateCards();
+  updateCharts();
+  updateTable();
+}
+
+// ─────────────────────────────────────────────
+// Sort
+// ─────────────────────────────────────────────
+function sortData() {
+  filtered.sort((a, b) => {
+    let va = a[sortCol], vb = b[sortCol];
+    if (sortCol.startsWith('data_')) {
+      va = parseDate(va); vb = parseDate(vb);
+    } else if (typeof va === 'number') {
+      // numeric
+    } else {
+      va = (va || '').toString().toLowerCase();
+      vb = (vb || '').toString().toLowerCase();
+    }
+    if (va === null || va === undefined) return 1;
+    if (vb === null || vb === undefined) return -1;
+    return sortAsc ? (va > vb ? 1 : -1) : (va < vb ? 1 : -1);
+  });
+}
+
+function parseDate(str) {
+  if (!str) return null;
+  const [d, m, y] = str.split('/');
+  return new Date(y, m - 1, d);
+}
+
+document.querySelectorAll('thead th[data-col]').forEach(th => {
+  th.addEventListener('click', () => {
+    const col = th.dataset.col;
+    if (sortCol === col) sortAsc = !sortAsc;
+    else { sortCol = col; sortAsc = true; }
+    document.querySelectorAll('thead th').forEach(t => t.classList.remove('sorted'));
+    th.classList.add('sorted');
+    sortData();
+    updateTable();
+  });
+});
+
+document.getElementById('searchInput').addEventListener('input', applyFilters);
+document.getElementById('statusFilter').addEventListener('change', applyFilters);
+document.getElementById('yearFilter').addEventListener('change', applyFilters);
+document.getElementById('tipoFilter').addEventListener('change', applyFilters);
+
+// ─────────────────────────────────────────────
+// Cards
+// ─────────────────────────────────────────────
+function updateCards() {
+  const total   = filtered.reduce((s, r) => s + (r.valor_solicitado || 0), 0);
+  const reimb   = filtered.reduce((s, r) => s + (r.valor_reembolsado || 0), 0);
+  const diff    = reimb - total;
+  const pago    = filtered.filter(r => r.status_categoria === 'pago').length;
+  const parcial = filtered.filter(r => r.status_categoria === 'pago_parcial').length;
+  const analise = filtered.filter(r => r.status_categoria === 'em_analise').length;
+  const rejeit  = filtered.filter(r => r.status_categoria === 'rejeitado').length;
+
+  document.getElementById('cards').innerHTML = `
+    <div class="card brand">
+      <div class="card-label">Total de registros</div>
+      <div class="card-value">${filtered.length}</div>
+      <div class="card-sub">reembolsos no período</div>
+    </div>
+    <div class="card blue">
+      <div class="card-label">Total solicitado</div>
+      <div class="card-value">${fmt(total)}</div>
+    </div>
+    <div class="card green">
+      <div class="card-label">Total reembolsado</div>
+      <div class="card-value">${fmt(reimb)}</div>
+    </div>
+    <div class="card ${diff < 0 ? 'red' : 'green'}">
+      <div class="card-label">Diferença</div>
+      <div class="card-value">${fmt(diff)}</div>
+      <div class="card-sub">${diff < 0 ? (((diff / total) * 100).toFixed(1) + '% não reembolsado') : 'reembolso integral'}</div>
+    </div>
+    <div class="card green">
+      <div class="card-label">Pagos</div>
+      <div class="card-value">${pago}</div>
+    </div>
+    <div class="card orange">
+      <div class="card-label">Pago Parcial</div>
+      <div class="card-value">${parcial}</div>
+    </div>
+    <div class="card blue">
+      <div class="card-label">Em Análise</div>
+      <div class="card-value">${analise}</div>
+    </div>
+    ${rejeit > 0 ? `<div class="card red">
+      <div class="card-label">Rejeitados</div>
+      <div class="card-value">${rejeit}</div>
+    </div>` : ''}
+  `;
+}
+
+// ─────────────────────────────────────────────
+// Charts
+// ─────────────────────────────────────────────
+function updateCharts() {
+  // Group by MM/YYYY of data_competencia
+  const byMonth = {};
+  filtered.forEach(r => {
+    const dc = r.data_competencia;
+    if (!dc) return;
+    const [d, m, y] = dc.split('/');
+    const key = `${m}/${y}`;
+    if (!byMonth[key]) byMonth[key] = { count: 0, solicitado: 0, reembolsado: 0 };
+    byMonth[key].count++;
+    byMonth[key].solicitado += r.valor_solicitado || 0;
+    byMonth[key].reembolsado += r.valor_reembolsado || 0;
+  });
+
+  const months = Object.keys(byMonth).sort((a, b) => {
+    const [ma, ya] = a.split('/'); const [mb, yb] = b.split('/');
+    return new Date(ya, ma - 1) - new Date(yb, mb - 1);
+  });
+
+  // Bar chart: count by month
+  if (chartBar) chartBar.destroy();
+  chartBar = new Chart(document.getElementById('chartBar'), {
+    type: 'bar',
+    data: {
+      labels: months,
+      datasets: [{
+        label: 'Reembolsos',
+        data: months.map(m => byMonth[m].count),
+        backgroundColor: 'rgba(204,0,0,0.75)',
+        borderRadius: 6
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: { legend: { display: false } },
+      scales: { y: { beginAtZero: true, ticks: { precision: 0 } } }
+    }
+  });
+
+  // Pie chart: by status
+  const statusMap = { pago: 0, pago_parcial: 0, em_analise: 0, rejeitado: 0 };
+  filtered.forEach(r => { if (statusMap[r.status_categoria] !== undefined) statusMap[r.status_categoria]++; });
+  if (chartPie) chartPie.destroy();
+  chartPie = new Chart(document.getElementById('chartPie'), {
+    type: 'doughnut',
+    data: {
+      labels: ['Pago', 'Pago Parcial', 'Em Análise', 'Rejeitado'],
+      datasets: [{
+        data: [statusMap.pago, statusMap.pago_parcial, statusMap.em_analise, statusMap.rejeitado],
+        backgroundColor: ['#34c759', '#ff9f0a', '#007aff', '#ff3b30'],
+        borderWidth: 0
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: { legend: { position: 'bottom' } },
+      cutout: '60%'
+    }
+  });
+
+  // Compare chart: solicitado vs reembolsado by month
+  if (chartCompare) chartCompare.destroy();
+  chartCompare = new Chart(document.getElementById('chartCompare'), {
+    type: 'bar',
+    data: {
+      labels: months,
+      datasets: [
+        { label: 'Solicitado', data: months.map(m => byMonth[m].solicitado), backgroundColor: 'rgba(0,122,255,0.6)', borderRadius: 4 },
+        { label: 'Reembolsado', data: months.map(m => byMonth[m].reembolsado), backgroundColor: 'rgba(52,199,89,0.75)', borderRadius: 4 }
+      ]
+    },
+    options: {
+      responsive: true,
+      plugins: { legend: { position: 'top' } },
+      scales: {
+        y: { beginAtZero: true, ticks: { callback: v => 'R$ ' + v.toLocaleString('pt-BR') } }
+      }
+    }
+  });
+}
+
+// ─────────────────────────────────────────────
+// Table
+// ─────────────────────────────────────────────
+function updateTable() {
+  const tbody = document.getElementById('tableBody');
+  const empty = document.getElementById('emptyState');
+  const table = document.getElementById('mainTable');
+  const count = document.getElementById('tableCount');
+
+  count.textContent = filtered.length + ' registros';
+
+  if (!filtered.length) {
+    empty.style.display = 'block';
+    table.style.display = 'none';
+    return;
+  }
+  empty.style.display = 'none';
+  table.style.display = '';
+
+  tbody.innerHTML = filtered.map(r => `
+    <tr>
+      <td style="font-family:monospace;font-size:.78rem">${r.protocolo || '—'}</td>
+      <td>${r.data_competencia || '<span style="color:var(--muted)">—</span>'}</td>
+      <td>${r.data_solicitacao || '—'}</td>
+      <td>${r.beneficiario || '—'}</td>
+      <td>${r.tipo_atendimento || '—'}</td>
+      <td class="amount" style="text-align:right">${r.valor_solicitado != null ? fmt(r.valor_solicitado) : '—'}</td>
+      <td class="amount" style="text-align:right">${r.valor_reembolsado != null ? fmt(r.valor_reembolsado) : '—'}</td>
+      <td class="amount ${(r.diff || 0) < 0 ? 'neg' : (r.diff || 0) === 0 ? 'zero' : ''}" style="text-align:right">
+        ${r.diff != null ? fmt(r.diff) : '—'}</td>
+      <td>${badgeFor(r)}</td>
+    </tr>
+  `).join('');
+}
+
+function badgeFor(r) {
+  const map = {
+    pago:       ['badge-pago',    r.status || 'Pago'],
+    pago_parcial:['badge-parcial', r.status || 'Pago Parcial'],
+    em_analise: ['badge-analise', r.status || 'Em Análise'],
+    rejeitado:  ['badge-rejeitado', r.status || 'Rejeitado']
+  };
+  const [cls, label] = map[r.status_categoria] || ['', r.status || '—'];
+  let html = `<span class="badge ${cls}">${label}</span>`;
+  if (r.motivo_rejeicao) html += ` <span title="${r.motivo_rejeicao}" style="cursor:help;color:var(--red)">⚠️</span>`;
+  if (r.acao_necessaria) html += ` <span title="Ação necessária" style="cursor:help">🔔</span>`;
+  return html;
+}
+
+function fmt(val) {
+  if (val == null) return '—';
+  return 'R$ ' + val.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+</script>
+</body>
+</html>
