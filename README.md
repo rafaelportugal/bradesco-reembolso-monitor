@@ -13,27 +13,17 @@
 - Gera um JSON estruturado com todos os dados
 - Identifica reembolsos rejeitados e captura o motivo
 - Suporta múltiplos beneficiários (titular + dependentes)
-- Gera dashboard HTML consolidado
-
-## Por que isso é necessário
-
-O portal Bradesco Saúde limita a tela de "Solicitações Recentes" a apenas **10 itens**. Esta skill contorna isso fazendo buscas mês a mês via pesquisa avançada, garantindo que nenhum reembolso seja perdido.
+- **Gera dashboard HTML interativo** com gráficos, filtros e tabela detalhada
 
 ---
 
 ## Como usar
 
-### Pré-requisitos
+### 1. Executar a skill (coletar os dados)
 
-- Extensão [Claude Chrome Extension](https://chrome.google.com/webstore/detail/claude-ai/...) instalada
-- Acesso ao portal [Bradesco Saúde](https://wwws.bradescosaude.com.br)
-- Conta ativa no plano Bradesco Saúde
-
-### Passo a passo
-
-1. **Faça login** manualmente no portal Bradesco Saúde
-2. **Abra o Claude** na extensão Chrome
-3. **Cole o comando** abaixo no chat, substituindo os dados fictícios pelos seus:
+1. Faça login manualmente no portal Bradesco Saúde
+2. Abra o Claude na extensão Chrome
+3. Cole o comando abaixo no chat, substituindo os dados fictícios pelos seus:
 
 ```
 SKILL: bradesco_reembolso_monitor
@@ -56,16 +46,45 @@ PARÂMETROS:
 - data_fim: 04/2026
 ```
 
+O Claude irá gerar e baixar um arquivo JSON com todos os reembolsos.
+
+### 2. Visualizar o dashboard
+
+1. Baixe ou clone este repositório
+2. Abra o arquivo `report/index.html` no seu navegador (duplo clique — sem servidor necessário)
+3. Clique em **"Carregar JSON"** e selecione o arquivo gerado pelo Claude
+4. Explore os dados com gráficos, filtros e tabela interativa
+
+---
+
+## Dashboard (`report/index.html`)
+
+O dashboard é um arquivo HTML + JavaScript puro, sem dependências além de Chart.js (carregado via CDN).
+
+**Funcionalidades:**
+
+- **Cards de resumo**: total de registros, valor solicitado, valor reembolsado, diferença, contagem por status
+- **Abas por beneficiário**: filtra tudo para titular, dependente1, dependente2 ou todos
+- **Gráfico de barras**: quantidade de reembolsos por mês (data de competência)
+- **Gráfico de rosca**: distribuição por status (Pago, Pago Parcial, Em Análise, Rejeitado)
+- **Gráfico de comparação**: valor solicitado vs reembolsado por mês
+- **Tabela detalhada**: ordenável por qualquer coluna, com filtro por texto, status, ano e tipo de atendimento
+- **Badges de alerta**: ⚠️ para rejeitados com motivo, 🔔 para registros que precisam de ação
+- **Drag & drop**: arraste o JSON diretamente na tela
+- **Privacidade**: todos os dados ficam 100% no seu navegador — nada é enviado a servidores
+
 ---
 
 ## Estrutura do repositório
 
 ```
 bradesco-reembolso-monitor/
-├── README.md                           # Este arquivo
-└── bradesco_reembolso_monitor/
-    ├── skill.md                        # Skill completa com todos os comandos e ações
-    └── exemplo_json.json               # Exemplo da estrutura de dados gerada
+├── README.md
+├── bradesco_reembolso_monitor/
+│   ├── skill.md               ← Skill completa com todos os comandos e ações
+│   └── exemplo_json.json      ← Exemplo da estrutura de dados (dados fictícios)
+└── report/
+    └── index.html             ← Dashboard HTML interativo
 ```
 
 ---
@@ -101,7 +120,7 @@ bradesco-reembolso-monitor/
 
 ---
 
-## Ações suportadas
+## Ações suportadas pela skill
 
 | Ação | Descrição |
 |------|-----------|
@@ -119,12 +138,7 @@ bradesco-reembolso-monitor/
 - O repositório usa apenas dados fictícios como exemplo
 - Seus dados reais ficam apenas no chat local com Claude
 - O JSON gerado é baixado para o seu computador
-
----
-
-## Contribuindo
-
-Sinta-se livre para abrir issues ou PRs com melhorias!
+- O dashboard abre localmente — nenhum dado sai do seu navegador
 
 ---
 
