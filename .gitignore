@@ -1,0 +1,7 @@
+# Ignorar arquivos JSON reais na pasta reembolso/ para proteger dados pessoais
+reembolso/*.json
+!reembolso/README.md
+
+# Arquivos de sistema
+.DS_Store
+Thumbs.db
