@@ -33,207 +33,132 @@
     header {
       background: var(--brand);
       color: white;
-      padding: 1.25rem 2rem;
+      padding: 1rem 2rem;
       display: flex;
       align-items: center;
-      justify-content: space-between;
       gap: 1rem;
-      flex-wrap: wrap;
     }
+    header h1 { font-size: 1.3rem; font-weight: 700; }
+    header p { font-size: 0.8rem; opacity: 0.85; }
 
-    header h1 { font-size: 1.4rem; font-weight: 700; letter-spacing: -0.02em; }
-    header p  { font-size: 0.85rem; opacity: 0.85; }
+    .main { max-width: 1400px; margin: 0 auto; padding: 2rem; }
 
+    /* ─── Upload Zone ─── */
     .upload-zone {
-      background: white;
       border: 2px dashed var(--border);
       border-radius: 12px;
       padding: 2.5rem;
       text-align: center;
-      cursor: pointer;
-      transition: border-color .2s, background .2s;
-      margin: 2rem auto;
-      max-width: 560px;
-    }
-    .upload-zone:hover { border-color: var(--brand); background: #fff5f5; }
-    .upload-zone .icon { font-size: 2.5rem; margin-bottom: .75rem; }
-    .upload-zone p { color: var(--muted); font-size: .9rem; }
-    .upload-zone strong { color: var(--brand); }
-    #fileInput { display: none; }
-
-    .btn {
-      display: inline-block;
-      margin-top: 1rem;
-      padding: .6rem 1.4rem;
-      background: var(--brand);
-      color: white;
-      border: none;
-      border-radius: 8px;
-      font-size: .9rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: background .2s;
-    }
-    .btn:hover { background: var(--brand-dark); }
-
-    main { max-width: 1280px; margin: 0 auto; padding: 2rem; }
-
-    #dashboard { display: none; }
-
-    /* Filters */
-    .filters {
-      display: flex;
-      flex-wrap: wrap;
-      gap: .75rem;
-      margin-bottom: 2rem;
-      align-items: center;
-    }
-    .filters select, .filters input[type=text] {
-      padding: .5rem .9rem;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      font-size: .875rem;
-      background: white;
-      color: var(--text);
-      outline: none;
-      transition: border-color .2s;
-    }
-    .filters select:focus, .filters input[type=text]:focus { border-color: var(--brand); }
-    .filters label { font-size: .8rem; color: var(--muted); }
-
-    /* Summary Cards */
-    .cards {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 1rem;
-      margin-bottom: 2rem;
-    }
-
-    .card {
       background: var(--card);
-      border-radius: 12px;
-      padding: 1.25rem 1.5rem;
-      box-shadow: 0 1px 3px rgba(0,0,0,.08);
-      border-left: 4px solid var(--border);
-    }
-    .card.green  { border-left-color: var(--green); }
-    .card.orange { border-left-color: var(--orange); }
-    .card.red    { border-left-color: var(--red); }
-    .card.blue   { border-left-color: var(--blue); }
-    .card.purple { border-left-color: var(--purple); }
-    .card.brand  { border-left-color: var(--brand); }
-
-    .card-label { font-size: .75rem; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin-bottom: .4rem; }
-    .card-value { font-size: 1.6rem; font-weight: 700; letter-spacing: -.03em; }
-    .card-sub   { font-size: .8rem; color: var(--muted); margin-top: .25rem; }
-
-    /* Charts */
-    .charts {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
-      gap: 1.25rem;
       margin-bottom: 2rem;
+      transition: border-color 0.2s, background 0.2s;
     }
-    .chart-card {
-      background: white;
-      border-radius: 12px;
-      padding: 1.25rem 1.5rem;
-      box-shadow: 0 1px 3px rgba(0,0,0,.08);
+    .upload-zone.drag-over { border-color: var(--brand); background: #fff0f0; }
+    .upload-zone h2 { font-size: 1.1rem; margin-bottom: 0.5rem; }
+    .upload-zone p { color: var(--muted); font-size: 0.9rem; margin-bottom: 1.2rem; }
+    .upload-buttons { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+    .btn {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      padding: 0.6rem 1.2rem; border-radius: 8px; border: none;
+      cursor: pointer; font-size: 0.9rem; font-weight: 600;
+      transition: opacity 0.15s;
     }
-    .chart-card h3 { font-size: .9rem; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 1rem; }
-    .chart-card canvas { width: 100% !important; }
+    .btn:hover { opacity: 0.85; }
+    .btn-primary { background: var(--brand); color: white; }
+    .btn-secondary { background: var(--bg); color: var(--text); border: 1px solid var(--border); }
+    .btn-folder { background: #007aff; color: white; }
+    .loaded-files {
+      margin-top: 1rem; display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center;
+    }
+    .file-badge {
+      background: #f0f0f5; border-radius: 20px; padding: 0.3rem 0.8rem;
+      font-size: 0.82rem; display: inline-flex; align-items: center; gap: 0.4rem;
+    }
+    .file-badge .dot { width: 8px; height: 8px; border-radius: 50%; }
+    .dot-theo { background: var(--blue); }
+    .dot-rafael { background: var(--green); }
+    .dot-nathalia { background: var(--purple); }
+    .dot-unknown { background: var(--muted); }
 
-    /* Table */
-    .table-card {
-      background: white;
-      border-radius: 12px;
-      padding: 1.5rem;
-      box-shadow: 0 1px 3px rgba(0,0,0,.08);
-      overflow-x: auto;
+    /* ─── Tabs ─── */
+    .tabs { display: flex; gap: 0.5rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+    .tab {
+      padding: 0.5rem 1.2rem; border-radius: 20px; border: 1px solid var(--border);
+      background: var(--card); cursor: pointer; font-size: 0.9rem;
+      transition: all 0.15s;
     }
-    .table-card h3 {
-      font-size: .9rem; color: var(--muted);
-      text-transform: uppercase; letter-spacing: .06em;
-      margin-bottom: 1rem;
-      display: flex; justify-content: space-between; align-items: center;
-    }
-    .table-count { font-size: .85rem; color: var(--muted); }
+    .tab.active { background: var(--brand); color: white; border-color: var(--brand); }
 
-    table { width: 100%; border-collapse: collapse; font-size: .85rem; }
-    thead th {
-      text-align: left;
-      padding: .6rem 1rem;
-      background: var(--bg);
-      color: var(--muted);
-      font-size: .75rem;
-      text-transform: uppercase;
-      letter-spacing: .06em;
-      cursor: pointer;
-      white-space: nowrap;
-      user-select: none;
+    /* ─── Filters ─── */
+    .filters {
+      display: flex; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap; align-items: flex-end;
     }
-    thead th:hover { color: var(--brand); }
-    thead th.sorted { color: var(--brand); }
-    thead th.sorted::after { content: " ↕"; }
+    .filter-group { display: flex; flex-direction: column; gap: 0.3rem; }
+    .filter-group label { font-size: 0.8rem; color: var(--muted); font-weight: 600; }
+    .filter-group input, .filter-group select {
+      padding: 0.45rem 0.8rem; border-radius: 8px; border: 1px solid var(--border);
+      font-size: 0.88rem; background: var(--card); color: var(--text); min-width: 140px;
+    }
 
-    tbody tr { border-top: 1px solid var(--border); transition: background .1s; }
-    tbody tr:hover { background: #fafafa; }
-    tbody td { padding: .7rem 1rem; vertical-align: middle; }
+    /* ─── Summary Cards ─── */
+    .summary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
+    .summary-card {
+      background: var(--card); border-radius: 12px; padding: 1.2rem;
+      border: 1px solid var(--border); text-align: center;
+    }
+    .summary-card .label { font-size: 0.78rem; color: var(--muted); margin-bottom: 0.4rem; }
+    .summary-card .value { font-size: 1.5rem; font-weight: 700; }
+    .summary-card .sub { font-size: 0.78rem; color: var(--muted); margin-top: 0.3rem; }
+    .value-green { color: var(--green); }
+    .value-red { color: var(--red); }
+    .value-orange { color: var(--orange); }
+
+    /* ─── Charts ─── */
+    .charts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem; margin-bottom: 2rem; }
+    .chart-card { background: var(--card); border-radius: 12px; padding: 1.2rem; border: 1px solid var(--border); }
+    .chart-card h3 { font-size: 0.9rem; color: var(--muted); margin-bottom: 1rem; }
+    .chart-card canvas { max-height: 260px; }
+
+    /* ─── Table ─── */
+    .table-wrap { background: var(--card); border-radius: 12px; border: 1px solid var(--border); overflow: hidden; }
+    .table-header { padding: 1rem 1.2rem; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+    .table-header h3 { font-size: 1rem; font-weight: 600; }
+    .table-count { font-size: 0.82rem; color: var(--muted); }
+    table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+    th {
+      background: #f8f8fa; padding: 0.7rem 1rem; text-align: left;
+      font-size: 0.78rem; font-weight: 600; color: var(--muted);
+      text-transform: uppercase; letter-spacing: 0.03em;
+      cursor: pointer; user-select: none; white-space: nowrap;
+    }
+    th:hover { background: #ebebef; }
+    td { padding: 0.75rem 1rem; border-bottom: 1px solid var(--border); vertical-align: middle; }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: #fafafa; }
 
     .badge {
-      display: inline-block;
-      padding: .2rem .6rem;
-      border-radius: 999px;
-      font-size: .72rem;
-      font-weight: 600;
-      white-space: nowrap;
+      display: inline-block; padding: 0.2rem 0.6rem; border-radius: 20px;
+      font-size: 0.75rem; font-weight: 600;
     }
-    .badge-pago        { background: #d1fae5; color: #065f46; }
-    .badge-parcial     { background: #fef3c7; color: #92400e; }
-    .badge-analise     { background: #dbeafe; color: #1e40af; }
-    .badge-rejeitado   { background: #fee2e2; color: #991b1b; }
+    .badge-pago { background: #d4edda; color: #155724; }
+    .badge-parcial { background: #fff3cd; color: #856404; }
+    .badge-analise { background: #cce5ff; color: #004085; }
+    .badge-rejeitado { background: #f8d7da; color: #721c24; }
+    .badge-person-theo { background: #e3f2fd; color: #1565c0; }
+    .badge-person-rafael { background: #e8f5e9; color: #2e7d32; }
+    .badge-person-nathalia { background: #f3e5f5; color: #6a1b9a; }
 
-    .amount { font-variant-numeric: tabular-nums; }
-    .amount.neg { color: var(--red); }
-    .amount.zero { color: var(--muted); }
+    .diff-positive { color: var(--green); font-weight: 600; }
+    .diff-negative { color: var(--red); font-weight: 600; }
 
-    /* Beneficiary tabs */
-    .tabs {
-      display: flex;
-      gap: .5rem;
-      margin-bottom: 1.5rem;
-      flex-wrap: wrap;
+    .no-data {
+      text-align: center; padding: 4rem; color: var(--muted);
     }
-    .tab {
-      padding: .45rem 1rem;
-      border-radius: 999px;
-      border: 1.5px solid var(--border);
-      background: white;
-      font-size: .85rem;
-      cursor: pointer;
-      transition: all .2s;
-      font-weight: 500;
-    }
-    .tab.active { background: var(--brand); border-color: var(--brand); color: white; }
-    .tab:hover:not(.active) { border-color: var(--brand); color: var(--brand); }
+    .no-data .icon { font-size: 3rem; margin-bottom: 1rem; }
 
-    #emptyState {
-      text-align: center;
-      padding: 3rem;
-      color: var(--muted);
-      font-size: .9rem;
-    }
-
-    footer {
-      text-align: center;
-      padding: 2rem;
-      color: var(--muted);
-      font-size: .8rem;
-    }
-
-    @media (max-width: 600px) {
-      main { padding: 1rem; }
-      .card-value { font-size: 1.3rem; }
+    .info-bar {
+      background: #fff8e1; border: 1px solid #ffe082; border-radius: 8px;
+      padding: 0.7rem 1rem; margin-bottom: 1.5rem; font-size: 0.85rem; color: #6d4c00;
     }
   </style>
 </head>
@@ -241,447 +166,452 @@
 
 <header>
   <div>
-    <h1>🔍 Bradesco Reembolso Monitor</h1>
-    <p>Dashboard de acompanhamento de reembolsos</p>
+    <h1>🏥 Bradesco Reembolso Monitor</h1>
+    <p>Acompanhamento de reembolsos — não substitui o portal da operadora</p>
   </div>
-  <button class="btn" onclick="document.getElementById('fileInput').click()">📂 Carregar JSON</button>
-  <input type="file" id="fileInput" accept=".json" />
 </header>
 
-<main>
-  <!-- Upload zone (shown when no data) -->
-  <div class="upload-zone" id="uploadZone" onclick="document.getElementById('fileInput').click()">
-    <div class="icon">📄</div>
-    <p><strong>Clique aqui</strong> ou arraste o arquivo JSON gerado pelo Claude</p>
-    <p style="margin-top:.5rem">Arquivo: <code>*_reembolsos_catalog_*.json</code></p>
-    <button class="btn" type="button">Selecionar arquivo</button>
+<div class="main">
+
+  <!-- Upload Zone -->
+  <div class="upload-zone" id="uploadZone">
+    <h2>📂 Carregar JSONs de Reembolso</h2>
+    <p>Selecione os arquivos JSON exportados do portal Bradesco Saúde ou abra a pasta <strong>reembolso/</strong> com todos de uma vez.</p>
+    <div class="upload-buttons">
+      <button class="btn btn-folder" onclick="openFolder()">🗂️ Abrir Pasta</button>
+      <button class="btn btn-primary" onclick="document.getElementById('fileInput').click()">📄 Selecionar Arquivos</button>
+      <button class="btn btn-secondary" onclick="loadExample()">📊 Ver Exemplo</button>
+    </div>
+    <input type="file" id="fileInput" accept=".json" multiple style="display:none" />
+    <input type="file" id="folderInput" webkitdirectory accept=".json" style="display:none" />
+    <div class="loaded-files" id="loadedFiles"></div>
   </div>
 
-  <!-- Dashboard (hidden until data loaded) -->
-  <div id="dashboard">
+  <div id="dashboard" style="display:none">
 
-    <!-- Beneficiary Tabs -->
-    <div class="tabs" id="tabs"></div>
+    <!-- Info bar -->
+    <div class="info-bar" id="infoBar">
+      ℹ️ Dados carregados localmente. Nenhuma informação é enviada para a internet.
+    </div>
+
+    <!-- Tabs -->
+    <div class="tabs" id="tabs">
+      <button class="tab active" data-person="all">Todos</button>
+      <button class="tab" data-person="theo">Theo</button>
+      <button class="tab" data-person="rafael">Rafael</button>
+      <button class="tab" data-person="nathalia">Nathalia</button>
+    </div>
 
     <!-- Filters -->
     <div class="filters">
-      <div>
-        <label>Buscar</label><br/>
-        <input type="text" id="searchInput" placeholder="Protocolo, tipo, status..." style="min-width:220px" />
+      <div class="filter-group">
+        <label>Buscar Protocolo</label>
+        <input type="text" id="filterText" placeholder="Ex: 2025.0001..." />
       </div>
-      <div>
-        <label>Status</label><br/>
-        <select id="statusFilter">
-          <option value="">Todos os status</option>
+      <div class="filter-group">
+        <label>Status</label>
+        <select id="filterStatus">
+          <option value="">Todos</option>
           <option value="pago">Pago</option>
           <option value="pago_parcial">Pago Parcial</option>
           <option value="em_analise">Em Análise</option>
-          <option value="rejeitado">Rejeitado / Não autorizado</option>
+          <option value="rejeitado">Rejeitado</option>
         </select>
       </div>
-      <div>
-        <label>Ano</label><br/>
-        <select id="yearFilter"><option value="">Todos os anos</option></select>
+      <div class="filter-group">
+        <label>Ano Competência</label>
+        <select id="filterYear">
+          <option value="">Todos</option>
+          <option value="2024">2024</option>
+          <option value="2025">2025</option>
+          <option value="2026">2026</option>
+        </select>
       </div>
-      <div>
-        <label>Tipo</label><br/>
-        <select id="tipoFilter"><option value="">Todos os tipos</option></select>
+      <div class="filter-group">
+        <label>Tipo de Atendimento</label>
+        <select id="filterTipo">
+          <option value="">Todos</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label>&nbsp;</label>
+        <button class="btn btn-secondary" onclick="clearFilters()">✕ Limpar</button>
       </div>
     </div>
 
-    <!-- Summary Cards -->
-    <div class="cards" id="cards"></div>
+    <!-- Summary -->
+    <div class="summary-grid" id="summaryGrid"></div>
 
     <!-- Charts -->
-    <div class="charts">
+    <div class="charts-grid">
       <div class="chart-card">
-        <h3>Reembolsos por mês (data competência)</h3>
-        <canvas id="chartBar" height="220"></canvas>
+        <h3>Reembolsos por Mês (Competência)</h3>
+        <canvas id="chartMonthly"></canvas>
       </div>
       <div class="chart-card">
-        <h3>Distribuição por status</h3>
-        <canvas id="chartPie" height="220"></canvas>
+        <h3>Distribuição por Status</h3>
+        <canvas id="chartStatus"></canvas>
       </div>
-      <div class="chart-card" style="grid-column: 1 / -1;">
-        <h3>Valor solicitado vs reembolsado por mês</h3>
-        <canvas id="chartCompare" height="140"></canvas>
+      <div class="chart-card">
+        <h3>Comparativo Solicitado × Reembolsado</h3>
+        <canvas id="chartCompare"></canvas>
       </div>
     </div>
 
     <!-- Table -->
-    <div class="table-card">
-      <h3>
-        Detalhamento
+    <div class="table-wrap">
+      <div class="table-header">
+        <h3>Detalhamento de Reembolsos</h3>
         <span class="table-count" id="tableCount"></span>
-      </h3>
-      <div id="emptyState" style="display:none">Nenhum registro encontrado para os filtros selecionados.</div>
-      <table id="mainTable">
-        <thead>
-          <tr>
-            <th data-col="protocolo">Protocolo</th>
-            <th data-col="data_competencia">Data Competência</th>
-            <th data-col="data_solicitacao">Data Solicitação</th>
-            <th data-col="beneficiario">Beneficiário</th>
-            <th data-col="tipo_atendimento">Tipo</th>
-            <th data-col="valor_solicitado" style="text-align:right">Solicitado</th>
-            <th data-col="valor_reembolsado" style="text-align:right">Reembolsado</th>
-            <th data-col="diff" style="text-align:right">Diff</th>
-            <th data-col="status">Status</th>
-          </tr>
-        </thead>
-        <tbody id="tableBody"></tbody>
-      </table>
+      </div>
+      <div style="overflow-x:auto">
+        <table id="mainTable">
+          <thead>
+            <tr>
+              <th data-col="protocolo">Protocolo ↕</th>
+              <th data-col="beneficiario">Pessoa ↕</th>
+              <th data-col="data_competencia">Data Competência ↕</th>
+              <th data-col="data_solicitacao">Data Solicitação ↕</th>
+              <th data-col="tipo_atendimento">Tipo ↕</th>
+              <th data-col="valor_solicitado">Solicitado ↕</th>
+              <th data-col="valor_reembolsado">Reembolsado ↕</th>
+              <th data-col="diff">Diff ↕</th>
+              <th data-col="status_categoria">Status ↕</th>
+            </tr>
+          </thead>
+          <tbody id="tableBody"></tbody>
+        </table>
+      </div>
     </div>
 
-  </div><!-- #dashboard -->
-</main>
-
-<footer>
-  bradesco-reembolso-monitor · dados ficam apenas no seu navegador · nenhuma informação é enviada a servidores
-</footer>
+  </div><!-- /dashboard -->
+</div><!-- /main -->
 
 <script>
-// ─────────────────────────────────────────────
-// State
-// ─────────────────────────────────────────────
-let allData = [];        // all records from all loaded JSONs
-let filtered = [];       // after filters
+// ─── State ───────────────────────────────────────────────────────────────────
+let allRecords = [];
 let sortCol = 'data_competencia';
-let sortAsc = false;
-let activeBeneficiary = 'todos';
-let chartBar, chartPie, chartCompare;
+let sortDir = -1;
+let activePerson = 'all';
+let monthlyChart, statusChart, compareChart;
 
-// ─────────────────────────────────────────────
-// File loading
-// ─────────────────────────────────────────────
-const fileInput = document.getElementById('fileInput');
-const uploadZone = document.getElementById('uploadZone');
+// ─── File Loading ─────────────────────────────────────────────────────────────
+function openFolder() {
+  document.getElementById('folderInput').click();
+}
 
-fileInput.addEventListener('change', e => {
-  const files = Array.from(e.target.files);
-  files.forEach(loadFile);
-  e.target.value = '';
+document.getElementById('folderInput').addEventListener('change', function(e) {
+  const files = Array.from(e.target.files).filter(f => f.name.endsWith('.json'));
+  if (files.length === 0) {
+    alert('Nenhum arquivo .json encontrado na pasta selecionada.');
+    return;
+  }
+  loadFiles(files);
 });
 
-uploadZone.addEventListener('dragover', e => { e.preventDefault(); uploadZone.style.borderColor='var(--brand)'; });
-uploadZone.addEventListener('dragleave', () => { uploadZone.style.borderColor=''; });
-uploadZone.addEventListener('drop', e => {
+document.getElementById('fileInput').addEventListener('change', function(e) {
+  loadFiles(Array.from(e.target.files));
+});
+
+// Drag & Drop
+const zone = document.getElementById('uploadZone');
+zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('drag-over'); });
+zone.addEventListener('dragleave', () => zone.classList.remove('drag-over'));
+zone.addEventListener('drop', e => {
   e.preventDefault();
-  uploadZone.style.borderColor = '';
-  Array.from(e.dataTransfer.files).forEach(loadFile);
+  zone.classList.remove('drag-over');
+  const files = Array.from(e.dataTransfer.files).filter(f => f.name.endsWith('.json'));
+  if (files.length) loadFiles(files);
 });
 
-function loadFile(file) {
-  const reader = new FileReader();
-  reader.onload = ev => {
-    try {
-      const json = JSON.parse(ev.target.result);
-      const records = json.reembolsos || (Array.isArray(json) ? json : []);
-      records.forEach(r => {
-        if (!allData.find(x => x.protocolo === r.protocolo)) {
-          allData.push(r);
-        }
-      });
-      render();
-    } catch(err) {
-      alert('Erro ao ler o arquivo: ' + err.message);
+function loadFiles(files) {
+  let loaded = 0;
+  const newRecords = [];
+  files.forEach(file => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      try {
+        const data = JSON.parse(e.target.result);
+        const records = Array.isArray(data) ? data : (data.reembolsos || []);
+        records.forEach(r => { r._source = file.name; });
+        newRecords.push(...records);
+      } catch(err) {
+        console.warn('Erro ao ler', file.name, err);
+      }
+      loaded++;
+      if (loaded === files.length) {
+        // Merge, deduplicate by protocolo
+        const existing = new Map(allRecords.map(r => [r.protocolo, r]));
+        newRecords.forEach(r => existing.set(r.protocolo, r));
+        allRecords = [...existing.values()];
+        renderLoadedFiles(files);
+        renderDashboard();
+      }
+    };
+    reader.readAsText(file);
+  });
+}
+
+function getPersonColor(person) {
+  const p = (person||'').toLowerCase();
+  if (p === 'theo') return 'dot-theo';
+  if (p === 'rafael') return 'dot-rafael';
+  if (p === 'nathalia') return 'dot-nathalia';
+  return 'dot-unknown';
+}
+
+function renderLoadedFiles(newFiles) {
+  const container = document.getElementById('loadedFiles');
+  const existing = new Set(container.querySelectorAll('.file-badge .fname'));
+  newFiles.forEach(f => {
+    const badge = document.createElement('span');
+    badge.className = 'file-badge';
+    const name = f.name.toLowerCase();
+    const color = name.includes('theo') ? 'dot-theo' : name.includes('rafael') ? 'dot-rafael' : name.includes('nathalia') ? 'dot-nathalia' : 'dot-unknown';
+    badge.innerHTML = `<span class="dot ${color}"></span><span class="fname">${f.name}</span>`;
+    container.appendChild(badge);
+  });
+}
+
+// ─── Example Data ─────────────────────────────────────────────────────────────
+function loadExample() {
+  allRecords = [
+    { protocolo: "2025.0001234567.00", data_solicitacao: "10/01/2025", data_competencia: "05/01/2025", beneficiario: "joao_silva", tipo_atendimento: "Psicoterapia", valor_solicitado: 200, valor_reembolsado: 180, diff: -20, status: "Pago", status_categoria: "pago", carta_resultado: "disponivel", acao_necessaria: false, motivo_rejeicao: null, motivo_entendido: null },
+    { protocolo: "2025.0002345678.00", data_solicitacao: "15/02/2025", data_competencia: "10/02/2025", beneficiario: "joao_silva", tipo_atendimento: "Psicoterapia", valor_solicitado: 200, valor_reembolsado: 200, diff: 0, status: "Pago", status_categoria: "pago", carta_resultado: "disponivel", acao_necessaria: false, motivo_rejeicao: null, motivo_entendido: null },
+    { protocolo: "2025.0003456789.00", data_solicitacao: "20/03/2025", data_competencia: "15/03/2025", beneficiario: "maria_lima", tipo_atendimento: "Fonoaudiologia", valor_solicitado: 350, valor_reembolsado: 350, diff: 0, status: "Pago", status_categoria: "pago", carta_resultado: "disponivel", acao_necessaria: false, motivo_rejeicao: null, motivo_entendido: null },
+    { protocolo: "2025.0004567890.00", data_solicitacao: "25/04/2025", data_competencia: "20/04/2025", beneficiario: "pedro_costa", tipo_atendimento: "Consulta online", valor_solicitado: 250, valor_reembolsado: 200, diff: -50, status: "Pago Parcial", status_categoria: "pago_parcial", carta_resultado: "disponivel", acao_necessaria: false, motivo_rejeicao: null, motivo_entendido: null },
+    { protocolo: "2025.0005678901.00", data_solicitacao: "05/05/2025", data_competencia: null, beneficiario: "joao_silva", tipo_atendimento: "Psicoterapia", valor_solicitado: 200, valor_reembolsado: 0, diff: -200, status: "Em Análise", status_categoria: "em_analise", carta_resultado: null, acao_necessaria: false, motivo_rejeicao: null, motivo_entendido: null },
+    { protocolo: "2025.0006789012.00", data_solicitacao: "10/06/2025", data_competencia: "05/06/2025", beneficiario: "maria_lima", tipo_atendimento: "Terapia Ocupacional", valor_solicitado: 400, valor_reembolsado: 0, diff: -400, status: "Não Autorizado", status_categoria: "rejeitado", carta_resultado: "disponivel", acao_necessaria: false, motivo_rejeicao: "Procedimento não coberto", motivo_entendido: null }
+  ];
+  document.getElementById('loadedFiles').innerHTML = '<span class="file-badge"><span class="dot dot-unknown"></span>exemplo_ficticio.json</span>';
+  renderDashboard();
+}
+
+// ─── Dashboard Rendering ──────────────────────────────────────────────────────
+function getFiltered() {
+  const textFilter = document.getElementById('filterText').value.toLowerCase();
+  const statusFilter = document.getElementById('filterStatus').value;
+  const yearFilter = document.getElementById('filterYear').value;
+  const tipoFilter = document.getElementById('filterTipo').value;
+
+  return allRecords.filter(r => {
+    if (activePerson !== 'all' && (r.beneficiario||'').toLowerCase() !== activePerson) return false;
+    if (textFilter && !(r.protocolo||'').toLowerCase().includes(textFilter)) return false;
+    if (statusFilter && r.status_categoria !== statusFilter) return false;
+    if (yearFilter && r.data_competencia) {
+      const year = r.data_competencia.split('/')[2];
+      if (year !== yearFilter) return false;
     }
-  };
-  reader.readAsText(file);
-}
-
-// ─────────────────────────────────────────────
-// Render
-// ─────────────────────────────────────────────
-function render() {
-  if (!allData.length) return;
-
-  document.getElementById('uploadZone').style.display = 'none';
-  document.getElementById('dashboard').style.display = 'block';
-
-  buildTabs();
-  populateFilters();
-  applyFilters();
-}
-
-function buildTabs() {
-  const beneficiaries = ['todos', ...new Set(allData.map(r => r.beneficiario).filter(Boolean))];
-  const tabs = document.getElementById('tabs');
-  tabs.innerHTML = beneficiaries.map(b =>
-    `<button class="tab ${b === activeBeneficiary ? 'active' : ''}" onclick="setTab('${b}')">${b === 'todos' ? '👥 Todos' : '👤 ' + b}</button>`
-  ).join('');
-}
-
-function setTab(b) {
-  activeBeneficiary = b;
-  buildTabs();
-  applyFilters();
-}
-
-function populateFilters() {
-  const years = [...new Set(allData.map(r => r.data_competencia?.split('/')[2]).filter(Boolean))].sort();
-  const yf = document.getElementById('yearFilter');
-  yf.innerHTML = '<option value="">Todos os anos</option>' + years.map(y => `<option value="${y}">${y}</option>`).join('');
-
-  const tipos = [...new Set(allData.map(r => r.tipo_atendimento).filter(Boolean))].sort();
-  const tf = document.getElementById('tipoFilter');
-  tf.innerHTML = '<option value="">Todos os tipos</option>' + tipos.map(t => `<option value="${t}">${t}</option>`).join('');
-}
-
-function applyFilters() {
-  const search = document.getElementById('searchInput').value.toLowerCase();
-  const status = document.getElementById('statusFilter').value;
-  const year   = document.getElementById('yearFilter').value;
-  const tipo   = document.getElementById('tipoFilter').value;
-
-  filtered = allData.filter(r => {
-    if (activeBeneficiary !== 'todos' && r.beneficiario !== activeBeneficiary) return false;
-    if (status && r.status_categoria !== status) return false;
-    if (year && !r.data_competencia?.endsWith(year)) return false;
-    if (tipo && r.tipo_atendimento !== tipo) return false;
-    if (search) {
-      const haystack = [r.protocolo, r.tipo_atendimento, r.status, r.beneficiario].join(' ').toLowerCase();
-      if (!haystack.includes(search)) return false;
-    }
+    if (tipoFilter && r.tipo_atendimento !== tipoFilter) return false;
     return true;
   });
-
-  sortData();
-  updateCards();
-  updateCharts();
-  updateTable();
 }
 
-// ─────────────────────────────────────────────
-// Sort
-// ─────────────────────────────────────────────
-function sortData() {
-  filtered.sort((a, b) => {
-    let va = a[sortCol], vb = b[sortCol];
-    if (sortCol.startsWith('data_')) {
-      va = parseDate(va); vb = parseDate(vb);
-    } else if (typeof va === 'number') {
-      // numeric
-    } else {
-      va = (va || '').toString().toLowerCase();
-      vb = (vb || '').toString().toLowerCase();
-    }
-    if (va === null || va === undefined) return 1;
-    if (vb === null || vb === undefined) return -1;
-    return sortAsc ? (va > vb ? 1 : -1) : (va < vb ? 1 : -1);
-  });
+function renderDashboard() {
+  document.getElementById('dashboard').style.display = 'block';
+  document.getElementById('uploadZone').style.borderStyle = 'solid';
+
+  // Populate tipo filter
+  const tipos = [...new Set(allRecords.map(r => r.tipo_atendimento).filter(Boolean))].sort();
+  const tipoSel = document.getElementById('filterTipo');
+  const currentTipo = tipoSel.value;
+  tipoSel.innerHTML = '<option value="">Todos</option>' + tipos.map(t => `<option value="${t}">${t}</option>`).join('');
+  tipoSel.value = currentTipo;
+
+  const filtered = getFiltered();
+  renderSummary(filtered);
+  renderCharts(filtered);
+  renderTable(filtered);
 }
 
-function parseDate(str) {
-  if (!str) return null;
-  const [d, m, y] = str.split('/');
-  return new Date(y, m - 1, d);
+// ─── Summary ──────────────────────────────────────────────────────────────────
+function fmt(val) {
+  return 'R$ ' + (val||0).toLocaleString('pt-BR', {minimumFractionDigits:2, maximumFractionDigits:2});
 }
 
-document.querySelectorAll('thead th[data-col]').forEach(th => {
-  th.addEventListener('click', () => {
-    const col = th.dataset.col;
-    if (sortCol === col) sortAsc = !sortAsc;
-    else { sortCol = col; sortAsc = true; }
-    document.querySelectorAll('thead th').forEach(t => t.classList.remove('sorted'));
-    th.classList.add('sorted');
-    sortData();
-    updateTable();
-  });
-});
+function renderSummary(records) {
+  const total = records.length;
+  const solicitado = records.reduce((s, r) => s + (r.valor_solicitado||0), 0);
+  const reembolsado = records.reduce((s, r) => s + (r.valor_reembolsado||0), 0);
+  const diff = reembolsado - solicitado;
+  const pagos = records.filter(r => r.status_categoria === 'pago').length;
+  const rejeitados = records.filter(r => r.status_categoria === 'rejeitado').length;
+  const emAnalise = records.filter(r => r.status_categoria === 'em_analise').length;
+  const taxa = solicitado > 0 ? (reembolsado / solicitado * 100).toFixed(1) : '—';
 
-document.getElementById('searchInput').addEventListener('input', applyFilters);
-document.getElementById('statusFilter').addEventListener('change', applyFilters);
-document.getElementById('yearFilter').addEventListener('change', applyFilters);
-document.getElementById('tipoFilter').addEventListener('change', applyFilters);
-
-// ─────────────────────────────────────────────
-// Cards
-// ─────────────────────────────────────────────
-function updateCards() {
-  const total   = filtered.reduce((s, r) => s + (r.valor_solicitado || 0), 0);
-  const reimb   = filtered.reduce((s, r) => s + (r.valor_reembolsado || 0), 0);
-  const diff    = reimb - total;
-  const pago    = filtered.filter(r => r.status_categoria === 'pago').length;
-  const parcial = filtered.filter(r => r.status_categoria === 'pago_parcial').length;
-  const analise = filtered.filter(r => r.status_categoria === 'em_analise').length;
-  const rejeit  = filtered.filter(r => r.status_categoria === 'rejeitado').length;
-
-  document.getElementById('cards').innerHTML = `
-    <div class="card brand">
-      <div class="card-label">Total de registros</div>
-      <div class="card-value">${filtered.length}</div>
-      <div class="card-sub">reembolsos no período</div>
+  document.getElementById('summaryGrid').innerHTML = `
+    <div class="summary-card">
+      <div class="label">Total de Solicitações</div>
+      <div class="value">${total}</div>
+      <div class="sub">${pagos} pagos · ${rejeitados} rejeitados</div>
     </div>
-    <div class="card blue">
-      <div class="card-label">Total solicitado</div>
-      <div class="card-value">${fmt(total)}</div>
+    <div class="summary-card">
+      <div class="label">Total Solicitado</div>
+      <div class="value">${fmt(solicitado)}</div>
+      <div class="sub">média ${fmt(total ? solicitado/total : 0)}</div>
     </div>
-    <div class="card green">
-      <div class="card-label">Total reembolsado</div>
-      <div class="card-value">${fmt(reimb)}</div>
+    <div class="summary-card">
+      <div class="label">Total Reembolsado</div>
+      <div class="value value-green">${fmt(reembolsado)}</div>
+      <div class="sub">taxa ${taxa}%</div>
     </div>
-    <div class="card ${diff < 0 ? 'red' : 'green'}">
-      <div class="card-label">Diferença</div>
-      <div class="card-value">${fmt(diff)}</div>
-      <div class="card-sub">${diff < 0 ? (((diff / total) * 100).toFixed(1) + '% não reembolsado') : 'reembolso integral'}</div>
+    <div class="summary-card">
+      <div class="label">Diferença (Diff)</div>
+      <div class="value ${diff < 0 ? 'value-red' : 'value-green'}">${fmt(diff)}</div>
+      <div class="sub">valor não reembolsado</div>
     </div>
-    <div class="card green">
-      <div class="card-label">Pagos</div>
-      <div class="card-value">${pago}</div>
+    <div class="summary-card">
+      <div class="label">Em Análise</div>
+      <div class="value value-orange">${emAnalise}</div>
+      <div class="sub">pendentes de resultado</div>
     </div>
-    <div class="card orange">
-      <div class="card-label">Pago Parcial</div>
-      <div class="card-value">${parcial}</div>
-    </div>
-    <div class="card blue">
-      <div class="card-label">Em Análise</div>
-      <div class="card-value">${analise}</div>
-    </div>
-    ${rejeit > 0 ? `<div class="card red">
-      <div class="card-label">Rejeitados</div>
-      <div class="card-value">${rejeit}</div>
-    </div>` : ''}
   `;
 }
 
-// ─────────────────────────────────────────────
-// Charts
-// ─────────────────────────────────────────────
-function updateCharts() {
-  // Group by MM/YYYY of data_competencia
-  const byMonth = {};
-  filtered.forEach(r => {
-    const dc = r.data_competencia;
-    if (!dc) return;
-    const [d, m, y] = dc.split('/');
-    const key = `${m}/${y}`;
-    if (!byMonth[key]) byMonth[key] = { count: 0, solicitado: 0, reembolsado: 0 };
-    byMonth[key].count++;
-    byMonth[key].solicitado += r.valor_solicitado || 0;
-    byMonth[key].reembolsado += r.valor_reembolsado || 0;
+// ─── Charts ───────────────────────────────────────────────────────────────────
+function parseDate(str) {
+  if (!str) return null;
+  const [d, m, y] = str.split('/');
+  return new Date(+y, +m - 1, +d);
+}
+
+function renderCharts(records) {
+  // Monthly by competência
+  const monthMap = {};
+  records.forEach(r => {
+    if (!r.data_competencia) return;
+    const [d, m, y] = r.data_competencia.split('/');
+    const key = `${y}-${m}`;
+    if (!monthMap[key]) monthMap[key] = { sol: 0, reimb: 0 };
+    monthMap[key].sol += r.valor_solicitado || 0;
+    monthMap[key].reimb += r.valor_reembolsado || 0;
+  });
+  const months = Object.keys(monthMap).sort();
+  const monthLabels = months.map(k => {
+    const [y, m] = k.split('-');
+    return new Date(+y, +m - 1).toLocaleDateString('pt-BR', {month:'short', year:'2-digit'});
   });
 
-  const months = Object.keys(byMonth).sort((a, b) => {
-    const [ma, ya] = a.split('/'); const [mb, yb] = b.split('/');
-    return new Date(ya, ma - 1) - new Date(yb, mb - 1);
-  });
-
-  // Bar chart: count by month
-  if (chartBar) chartBar.destroy();
-  chartBar = new Chart(document.getElementById('chartBar'), {
+  if (monthlyChart) monthlyChart.destroy();
+  monthlyChart = new Chart(document.getElementById('chartMonthly'), {
     type: 'bar',
     data: {
-      labels: months,
-      datasets: [{
-        label: 'Reembolsos',
-        data: months.map(m => byMonth[m].count),
-        backgroundColor: 'rgba(204,0,0,0.75)',
-        borderRadius: 6
-      }]
+      labels: monthLabels,
+      datasets: [
+        { label: 'Solicitado', data: months.map(k => monthMap[k].sol), backgroundColor: '#CC000066', borderColor: '#CC0000', borderWidth: 1 },
+        { label: 'Reembolsado', data: months.map(k => monthMap[k].reimb), backgroundColor: '#34c75966', borderColor: '#34c759', borderWidth: 1 }
+      ]
     },
-    options: {
-      responsive: true,
-      plugins: { legend: { display: false } },
-      scales: { y: { beginAtZero: true, ticks: { precision: 0 } } }
-    }
+    options: { responsive: true, plugins: { legend: { position: 'bottom' } }, scales: { y: { beginAtZero: true } } }
   });
 
-  // Pie chart: by status
-  const statusMap = { pago: 0, pago_parcial: 0, em_analise: 0, rejeitado: 0 };
-  filtered.forEach(r => { if (statusMap[r.status_categoria] !== undefined) statusMap[r.status_categoria]++; });
-  if (chartPie) chartPie.destroy();
-  chartPie = new Chart(document.getElementById('chartPie'), {
+  // Status doughnut
+  const statusCount = { pago: 0, pago_parcial: 0, em_analise: 0, rejeitado: 0 };
+  records.forEach(r => { if (r.status_categoria && statusCount[r.status_categoria] !== undefined) statusCount[r.status_categoria]++; });
+  if (statusChart) statusChart.destroy();
+  statusChart = new Chart(document.getElementById('chartStatus'), {
     type: 'doughnut',
     data: {
       labels: ['Pago', 'Pago Parcial', 'Em Análise', 'Rejeitado'],
-      datasets: [{
-        data: [statusMap.pago, statusMap.pago_parcial, statusMap.em_analise, statusMap.rejeitado],
-        backgroundColor: ['#34c759', '#ff9f0a', '#007aff', '#ff3b30'],
-        borderWidth: 0
-      }]
+      datasets: [{ data: [statusCount.pago, statusCount.pago_parcial, statusCount.em_analise, statusCount.rejeitado], backgroundColor: ['#34c759', '#ff9f0a', '#007aff', '#ff3b30'] }]
     },
-    options: {
-      responsive: true,
-      plugins: { legend: { position: 'bottom' } },
-      cutout: '60%'
-    }
+    options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
   });
 
-  // Compare chart: solicitado vs reembolsado by month
-  if (chartCompare) chartCompare.destroy();
-  chartCompare = new Chart(document.getElementById('chartCompare'), {
+  // Comparison by person
+  const persons = [...new Set(records.map(r => r.beneficiario).filter(Boolean))];
+  const personSol = persons.map(p => records.filter(r => r.beneficiario === p).reduce((s, r) => s + (r.valor_solicitado||0), 0));
+  const personReim = persons.map(p => records.filter(r => r.beneficiario === p).reduce((s, r) => s + (r.valor_reembolsado||0), 0));
+  if (compareChart) compareChart.destroy();
+  compareChart = new Chart(document.getElementById('chartCompare'), {
     type: 'bar',
     data: {
-      labels: months,
+      labels: persons,
       datasets: [
-        { label: 'Solicitado', data: months.map(m => byMonth[m].solicitado), backgroundColor: 'rgba(0,122,255,0.6)', borderRadius: 4 },
-        { label: 'Reembolsado', data: months.map(m => byMonth[m].reembolsado), backgroundColor: 'rgba(52,199,89,0.75)', borderRadius: 4 }
+        { label: 'Solicitado', data: personSol, backgroundColor: '#CC000066', borderColor: '#CC0000', borderWidth: 1 },
+        { label: 'Reembolsado', data: personReim, backgroundColor: '#34c75966', borderColor: '#34c759', borderWidth: 1 }
       ]
     },
-    options: {
-      responsive: true,
-      plugins: { legend: { position: 'top' } },
-      scales: {
-        y: { beginAtZero: true, ticks: { callback: v => 'R$ ' + v.toLocaleString('pt-BR') } }
-      }
-    }
+    options: { responsive: true, plugins: { legend: { position: 'bottom' } }, scales: { y: { beginAtZero: true } } }
   });
 }
 
-// ─────────────────────────────────────────────
-// Table
-// ─────────────────────────────────────────────
-function updateTable() {
-  const tbody = document.getElementById('tableBody');
-  const empty = document.getElementById('emptyState');
-  const table = document.getElementById('mainTable');
-  const count = document.getElementById('tableCount');
+// ─── Table ────────────────────────────────────────────────────────────────────
+function renderTable(records) {
+  const sorted = [...records].sort((a, b) => {
+    let av = a[sortCol], bv = b[sortCol];
+    if (sortCol === 'data_competencia' || sortCol === 'data_solicitacao') {
+      av = parseDate(av) || new Date(0);
+      bv = parseDate(bv) || new Date(0);
+    }
+    if (av == null) return 1; if (bv == null) return -1;
+    return av < bv ? -sortDir : av > bv ? sortDir : 0;
+  });
 
-  count.textContent = filtered.length + ' registros';
+  document.getElementById('tableCount').textContent = sorted.length + ' registros';
 
-  if (!filtered.length) {
-    empty.style.display = 'block';
-    table.style.display = 'none';
-    return;
-  }
-  empty.style.display = 'none';
-  table.style.display = '';
-
-  tbody.innerHTML = filtered.map(r => `
-    <tr>
-      <td style="font-family:monospace;font-size:.78rem">${r.protocolo || '—'}</td>
-      <td>${r.data_competencia || '<span style="color:var(--muted)">—</span>'}</td>
-      <td>${r.data_solicitacao || '—'}</td>
-      <td>${r.beneficiario || '—'}</td>
-      <td>${r.tipo_atendimento || '—'}</td>
-      <td class="amount" style="text-align:right">${r.valor_solicitado != null ? fmt(r.valor_solicitado) : '—'}</td>
-      <td class="amount" style="text-align:right">${r.valor_reembolsado != null ? fmt(r.valor_reembolsado) : '—'}</td>
-      <td class="amount ${(r.diff || 0) < 0 ? 'neg' : (r.diff || 0) === 0 ? 'zero' : ''}" style="text-align:right">
-        ${r.diff != null ? fmt(r.diff) : '—'}</td>
-      <td>${badgeFor(r)}</td>
-    </tr>
-  `).join('');
-}
-
-function badgeFor(r) {
-  const map = {
-    pago:       ['badge-pago',    r.status || 'Pago'],
-    pago_parcial:['badge-parcial', r.status || 'Pago Parcial'],
-    em_analise: ['badge-analise', r.status || 'Em Análise'],
-    rejeitado:  ['badge-rejeitado', r.status || 'Rejeitado']
+  const personBadge = p => {
+    const pl = (p||'').toLowerCase();
+    const cls = pl === 'theo' ? 'badge-person-theo' : pl === 'rafael' ? 'badge-person-rafael' : pl === 'nathalia' ? 'badge-person-nathalia' : '';
+    return `<span class="badge ${cls}">${p||'—'}</span>`;
   };
-  const [cls, label] = map[r.status_categoria] || ['', r.status || '—'];
-  let html = `<span class="badge ${cls}">${label}</span>`;
-  if (r.motivo_rejeicao) html += ` <span title="${r.motivo_rejeicao}" style="cursor:help;color:var(--red)">⚠️</span>`;
-  if (r.acao_necessaria) html += ` <span title="Ação necessária" style="cursor:help">🔔</span>`;
-  return html;
+  const statusBadge = s => {
+    const cls = s === 'pago' ? 'badge-pago' : s === 'pago_parcial' ? 'badge-parcial' : s === 'em_analise' ? 'badge-analise' : s === 'rejeitado' ? 'badge-rejeitado' : '';
+    const label = s === 'pago' ? 'Pago' : s === 'pago_parcial' ? 'Parcial' : s === 'em_analise' ? 'Em Análise' : s === 'rejeitado' ? 'Rejeitado' : s||'—';
+    return `<span class="badge ${cls}">${label}</span>`;
+  };
+
+  document.getElementById('tableBody').innerHTML = sorted.length === 0
+    ? '<tr><td colspan="9" class="no-data"><div class="icon">🔍</div>Nenhum registro encontrado</td></tr>'
+    : sorted.map(r => {
+      const diff = (r.valor_reembolsado||0) - (r.valor_solicitado||0);
+      const diffClass = diff < 0 ? 'diff-negative' : 'diff-positive';
+      const rejNote = r.motivo_rejeicao ? `<br><small style="color:var(--muted)">${r.motivo_rejeicao}</small>` : '';
+      return `<tr>
+        <td style="font-family:monospace;font-size:0.8rem">${r.protocolo||'—'}</td>
+        <td>${personBadge(r.beneficiario)}</td>
+        <td>${r.data_competencia||'—'}</td>
+        <td>${r.data_solicitacao||'—'}</td>
+        <td>${r.tipo_atendimento||'—'}</td>
+        <td>${fmt(r.valor_solicitado)}</td>
+        <td>${fmt(r.valor_reembolsado)}</td>
+        <td class="${diffClass}">${fmt(diff)}</td>
+        <td>${statusBadge(r.status_categoria)}${rejNote}</td>
+      </tr>`;
+    }).join('');
 }
 
-function fmt(val) {
-  if (val == null) return '—';
-  return 'R$ ' + val.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+// ─── Tabs & Filters ───────────────────────────────────────────────────────────
+document.getElementById('tabs').addEventListener('click', e => {
+  const tab = e.target.closest('.tab');
+  if (!tab) return;
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  tab.classList.add('active');
+  activePerson = tab.dataset.person;
+  renderDashboard();
+});
+
+['filterText','filterStatus','filterYear','filterTipo'].forEach(id => {
+  document.getElementById(id).addEventListener('input', renderDashboard);
+  document.getElementById(id).addEventListener('change', renderDashboard);
+});
+
+function clearFilters() {
+  document.getElementById('filterText').value = '';
+  document.getElementById('filterStatus').value = '';
+  document.getElementById('filterYear').value = '';
+  document.getElementById('filterTipo').value = '';
+  renderDashboard();
 }
+
+// ─── Sortable Table ───────────────────────────────────────────────────────────
+document.getElementById('mainTable').addEventListener('click', e => {
+  const th = e.target.closest('th[data-col]');
+  if (!th) return;
+  const col = th.dataset.col;
+  if (sortCol === col) { sortDir *= -1; } else { sortCol = col; sortDir = -1; }
+  renderDashboard();
+});
 </script>
 </body>
 </html>
