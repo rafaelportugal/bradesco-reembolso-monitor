@@ -1,0 +1,101 @@
+{
+  "_comentario": "Arquivo de exemplo com dados FICTÍCIOS. Nunca commite dados reais aqui.",
+  "metadata": {
+    "gerado_em": "15/04/2026 10:30",
+    "beneficiario": "joao_silva",
+    "periodo": "01/2025 - 04/2026",
+    "total_registros": 5,
+    "total_solicitado": 4750.00,
+    "total_reembolsado": 3980.00,
+    "diferenca": -770.00,
+    "por_status": {
+      "pago": 3,
+      "pago_parcial": 1,
+      "em_analise": 1,
+      "rejeitado": 0
+    }
+  },
+  "reembolsos": [
+    {
+      "protocolo": "2025.0001234567.00",
+      "data_solicitacao": "15/01/2025",
+      "data_competencia": "10/01/2025",
+      "beneficiario": "joao_silva",
+      "tipo_atendimento": "Consultas",
+      "valor_solicitado": 350.00,
+      "valor_reembolsado": 280.00,
+      "diff": -70.00,
+      "status": "Pago",
+      "status_categoria": "pago",
+      "carta_resultado": "disponivel",
+      "acao_necessaria": false,
+      "motivo_rejeicao": null,
+      "motivo_entendido": null
+    },
+    {
+      "protocolo": "2025.0002345678.00",
+      "data_solicitacao": "20/02/2025",
+      "data_competencia": "14/02/2025",
+      "beneficiario": "joao_silva",
+      "tipo_atendimento": "Terapias Multidisciplinares",
+      "valor_solicitado": 1200.00,
+      "valor_reembolsado": 1200.00,
+      "diff": 0.00,
+      "status": "Pago",
+      "status_categoria": "pago",
+      "carta_resultado": "disponivel",
+      "acao_necessaria": false,
+      "motivo_rejeicao": null,
+      "motivo_entendido": null
+    },
+    {
+      "protocolo": "2025.0003456789.00",
+      "data_solicitacao": "10/04/2025",
+      "data_competencia": "05/04/2025",
+      "beneficiario": "joao_silva",
+      "tipo_atendimento": "Exames",
+      "valor_solicitado": 800.00,
+      "valor_reembolsado": 600.00,
+      "diff": -200.00,
+      "status": "Pago Parcialmente",
+      "status_categoria": "pago_parcial",
+      "carta_resultado": "disponivel",
+      "acao_necessaria": false,
+      "motivo_rejeicao": null,
+      "motivo_entendido": null
+    },
+    {
+      "protocolo": "2025.0004567890.00",
+      "data_solicitacao": "05/07/2025",
+      "data_competencia": "01/07/2025",
+      "beneficiario": "joao_silva",
+      "tipo_atendimento": "Consultas",
+      "valor_solicitado": 900.00,
+      "valor_reembolsado": 900.00,
+      "diff": 0.00,
+      "status": "Pago",
+      "status_categoria": "pago",
+      "carta_resultado": "disponivel",
+      "acao_necessaria": false,
+      "motivo_rejeicao": null,
+      "motivo_entendido": null
+    },
+    {
+      "protocolo": "2026.0005678901.00",
+      "data_solicitacao": "01/04/2026",
+      "data_competencia": null,
+      "beneficiario": "joao_silva",
+      "tipo_atendimento": "Terapias Multidisciplinares",
+      "valor_solicitado": 1500.00,
+      "valor_reembolsado": null,
+      "diff": null,
+      "status": "Em Análise",
+      "status_categoria": "em_analise",
+      "carta_resultado": null,
+      "acao_necessaria": true,
+      "motivo_rejeicao": null,
+      "motivo_entendido": null,
+      "_nota": "Em análise - data_competencia e carta_resultado serão capturados após liberação"
+    }
+  ]
+}
